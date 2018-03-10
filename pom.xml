@@ -5,6 +5,9 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>Metamodel Driven Measurement</name>
   <description>Metamodel Driven Measurement (M2DM) Tool for Java</description>
+  
+  <packaging>jar</packaging>
+  
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -12,10 +15,56 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.6.1</version>
         <configuration>
-          <source/>
-          <target/>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
     </plugins>
   </build>
+  
+  <organization>
+  	<name>Quasar Research Group</name>
+  	<url>https://sites.google.com/site/quasarresearchgroup/home</url>
+  </organization>
+  
+  <dependencies>
+	<dependency>
+	    <groupId>org.eclipse.jdt</groupId>
+	    <artifactId>org.eclipse.jdt.core</artifactId>
+	    <version>3.7.1</version>
+	</dependency>
+
+	<dependency>
+	    <groupId>org.eclipse.ui</groupId>
+	    <artifactId>ide</artifactId>
+	    <version>3.3.0-I20070620</version>
+	</dependency>
+
+	<dependency>
+	    <groupId>org.eclipse.swt</groupId>
+	    <artifactId>org.eclipse.swt.cocoa.macosx</artifactId>
+	    <version>4.3</version>
+	</dependency>
+	
+	<dependency>
+	    <groupId>org.eclipse.jface</groupId>
+	    <artifactId>org.eclipse.jface</artifactId>
+	    <version>3.3.0</version>
+	</dependency>
+
+  </dependencies>
+  
+  <repositories>
+    <repository>
+      <id>ops4j</id>
+      <name>ops4j repository</name>
+      <url>http://repository.ops4j.org/maven2/</url>
+    </repository>
+    <repository>
+      <id>wso2</id>
+      <name>wso2 repository</name>
+      <url>http://dist.wso2.org/maven2/</url>
+    </repository>
+  
+  </repositories>
 </project>
