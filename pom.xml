@@ -34,10 +34,11 @@
 	    <version>3.7.1</version>
 	</dependency>
 
+
 	<dependency>
-	    <groupId>org.eclipse.ui</groupId>
-	    <artifactId>ide</artifactId>
-	    <version>3.3.0-I20070620</version>
+	    <groupId>org.eclipse</groupId>
+    	<artifactId>ui</artifactId>
+    	<version>3.3.0-I20070614-0800</version>
 	</dependency>
 
 	<dependency>
