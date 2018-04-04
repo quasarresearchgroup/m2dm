@@ -121,7 +121,7 @@ public class JM2Loader {
 
 		// Initialize USE and load EJMM specification
 		api.initialize(new String[0], useDirectory, modelDirectory);
-		system = api.compileSpecification(modelFile);
+		system = api.compileSpecification(modelFile, false);
 		
 		// Create default objects
 		System.out.println("Creating default objects");

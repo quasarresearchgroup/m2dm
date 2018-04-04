@@ -31,8 +31,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionGroup;
 import org.quasar.juse.api.JUSE_ProgramingFacade;
 
-import ejm2.tools.JM2Loader;
-import ejm2.views.EJM2View;
+import main.java.ejm2.tools.JM2Loader;
+import main.java.ejm2.views.EJM2View;
 
 public class EJM2ActionGroup extends ActionGroup{
 

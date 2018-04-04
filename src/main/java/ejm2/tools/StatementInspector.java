@@ -44,7 +44,8 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.quasar.juse.api.JUSE_ProgramingFacade;
 import org.tzi.use.uml.mm.MAssociation;
-import org.tzi.use.uml.ocl.type.ObjectType;
+import org.tzi.use.uml.mm.MClass;
+import org.tzi.use.uml.ocl.type.OclAnyType;
 import org.tzi.use.uml.ocl.value.BooleanValue;
 import org.tzi.use.uml.ocl.value.IntegerValue;
 import org.tzi.use.uml.ocl.value.ObjectValue;
@@ -256,14 +257,14 @@ public class StatementInspector {
 	public void inspectStatement(DoStatement node, MObject nodeMObject) {
 		Statement body = node.getBody();
 		MObject bodyMObject = createStatementObject(body);
-		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(new ObjectType(api.classByName(body.getClass().getSimpleName())),bodyMObject));
+		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(api.classByName(body.getClass().getSimpleName()),bodyMObject));
 		inspectStatement(body, bodyMObject);
 	}
 
 	public void inspectStatement(EnhancedForStatement node, MObject nodeMObject) {
 		Statement body = node.getBody();
 		MObject bodyMObject = createStatementObject(body);
-		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(new ObjectType(api.classByName(body.getClass().getSimpleName())),bodyMObject));
+		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(api.classByName(body.getClass().getSimpleName()),bodyMObject));
 		//TODO associate variable?
 		IVariableBinding parameterBinding = node.getParameter().resolveBinding();
 		
@@ -282,7 +283,7 @@ public class StatementInspector {
 	public void inspectStatement(ForStatement node, MObject nodeMObject) {
 		Statement body = node.getBody();
 		MObject bodyMObject = createStatementObject(body);
-		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(new ObjectType(api.classByName(body.getClass().getSimpleName())),bodyMObject));
+		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(api.classByName(body.getClass().getSimpleName()),bodyMObject));
 		HashSet<IBinding> dependencies = new HashSet<IBinding>();
 		
 		Expression expression = node.getExpression();
@@ -328,13 +329,13 @@ public class StatementInspector {
 
 		Statement thenStatement = node.getThenStatement();
 		MObject thenMObject = createStatementObject(thenStatement);
-		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "thenStatement"), new ObjectValue(new ObjectType(api.classByName(thenStatement.getClass().getSimpleName())),thenMObject));
+		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "thenStatement"), new ObjectValue(api.classByName(thenStatement.getClass().getSimpleName()),thenMObject));
 		inspectStatement(thenStatement, thenMObject);
 		
 		Statement elseStatement = node.getElseStatement();
 		if(elseStatement != null){
 			MObject elseMObject = createStatementObject(elseStatement);
-			api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "optionalElseStatement"), new ObjectValue(new ObjectType(api.classByName(elseStatement.getClass().getSimpleName())),elseMObject));
+			api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "optionalElseStatement"), new ObjectValue(api.classByName(elseStatement.getClass().getSimpleName()),elseMObject));
 			inspectStatement(elseStatement, elseMObject);
 		}
 	}
@@ -342,7 +343,7 @@ public class StatementInspector {
 	public void inspectStatement(LabeledStatement node, MObject nodeMObject) {
 		Statement body = node.getBody();
 		MObject bodyMObject = createStatementObject(body);
-		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(new ObjectType(api.classByName(body.getClass().getSimpleName())),bodyMObject));
+		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(api.classByName(body.getClass().getSimpleName()),bodyMObject));
 		inspectStatement(body, bodyMObject);
 	}
 
@@ -407,7 +408,7 @@ public class StatementInspector {
 	public void inspectStatement(SynchronizedStatement node, MObject nodeMObject) {
 		Statement body = node.getBody();
 		MObject bodyMObject = createStatementObject(body);
-		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(new ObjectType(api.classByName(body.getClass().getSimpleName())),bodyMObject));
+		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(api.classByName(body.getClass().getSimpleName()),bodyMObject));
 		
 		analyzeStatementExpression(nodeMObject, node.getExpression());
 
@@ -421,18 +422,18 @@ public class StatementInspector {
 	public void inspectStatement(TryStatement node, MObject nodeMObject) {
 		Statement body = node.getBody();
 		MObject bodyMObject = createStatementObject(body);
-		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(new ObjectType(api.classByName(body.getClass().getSimpleName())),bodyMObject));
+		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(api.classByName(body.getClass().getSimpleName()),bodyMObject));
 		inspectStatement(body, bodyMObject);
 		
 		Statement finallyStatement = node.getFinally();
 		if(finallyStatement != null){
 			MObject finallyMObject = createStatementObject(finallyStatement);
-			api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "optionalFinallyBody"), new ObjectValue(new ObjectType(api.classByName(finallyStatement.getClass().getSimpleName())),finallyMObject));
+			api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "optionalFinallyBody"), new ObjectValue(api.classByName(finallyStatement.getClass().getSimpleName()),finallyMObject));
 			inspectStatement(finallyStatement, finallyMObject);
 		}
 				
 		HashSet<Value> catchClauseSet = new HashSet<Value>();
-		ObjectType catchClauseObjectType = new ObjectType(api.classByName(CATCH_CLAUSE_NAME));
+		MClass catchClauseObjectType = api.classByName(CATCH_CLAUSE_NAME);
 		for(Object cc: node.catchClauses()){
 			MObject catchClauseMObject = createCatchClauseObject((CatchClause)cc);
 			catchClauseSet.add(new ObjectValue(catchClauseObjectType, catchClauseMObject));
@@ -472,7 +473,7 @@ public class StatementInspector {
 	public void inspectCatchClause(CatchClause node, MObject nodeMObject) {
 		Statement body = node.getBody();
 		MObject bodyMObject = createStatementObject(body);
-		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(new ObjectType(api.classByName(body.getClass().getSimpleName())),bodyMObject));
+		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(api.classByName(body.getClass().getSimpleName()),bodyMObject));
 		if(node.getException().resolveBinding() != null){
 			MObject localVariableMObject = createLocalVariableObject(node.getException().resolveBinding().getJavaElement(), node.getException().resolveBinding().getType());
 			api.createLink(api.associationByName("A_CatchClause_LocalVariable"), Arrays.asList(nodeMObject, localVariableMObject));
@@ -503,7 +504,7 @@ public class StatementInspector {
 	public void inspectStatement(WhileStatement node, MObject nodeMObject) {
 		Statement body = node.getBody();
 		MObject bodyMObject = createStatementObject(body);
-		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(new ObjectType(api.classByName(body.getClass().getSimpleName())),bodyMObject));
+		api.setObjectAttribute(nodeMObject, api.attributeByName(nodeMObject, "body"), new ObjectValue(api.classByName(body.getClass().getSimpleName()),bodyMObject));
 		
 		analyzeStatementExpression(nodeMObject, node.getExpression());
 

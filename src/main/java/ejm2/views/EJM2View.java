@@ -14,7 +14,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
-import ejm2.ui.EJM2ActionGroup;
+import main.java.ejm2.ui.EJM2ActionGroup;
+
+
 
 public class EJM2View extends ViewPart {
 
