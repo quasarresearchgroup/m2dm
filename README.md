@@ -7,7 +7,7 @@ Metamodel Driven Measurement (M2DM) is a paradigm-independent approach to formal
 
 Due to the emergence of sanitized open source repositories, namely in Java, one of the most popular programming languages, the quest for mining them for research purposes has increased lately. Research endeavors of this kind require empirical validation and the latter implies defining explanatory and outcome variables. Those variables are expressed in this context by the so-called software metrics. Despite the fact that several object-oriented metrics suites have been proposed in the past (e.g. C&K or MOOD suites), no M2DM open-source tool for Java was available and we kept receiving requests worldwide for such a tool. Therefore, we decided to build one on top of Eclipse, the most popular open-source IDE currently used. Since M2DM requires a metamodel of the target domain, we proposed the EJMM (Eclipse Java Metamodel)[9,10], based upon and instantiated through Eclipse's Java Development Tools.
 
-The provided M2DM plugin allows users to easily define new software metrics in OCL upon the EJMM. We have also ported the aforementioned FLAME library to the EJMM.
+The provided M2DM plugin allows users to easily define new software metrics in OCL upon the EJMM. We have also ported the aforementioned FLAME library to the EJMM. For more information on the internal details of the M2DM tool please read [9,10]. 
 
 ## Notes (version 0.8.5)
 ### Installation
@@ -43,8 +43,7 @@ You may input any OCL query on this text box and press the return key (Enter) to
 
 Results are shown in the large text area in the bottom of the view.
 
-## More Info and Citations
-For more information on the internal details of the EJMM tool or for citation purposes, please refer to: 
+## Bibliography
 * [10] Pedro Janeiro Coimbra, Fernando Brito e Abreu, “[The Eclipse Java Metamodel: Scaffolding Software Engineering Research on Java Projects with Model-Driven Techniques](http://dx.doi.org/10.5220/0004715303920399)”, proceedings of the 2nd International Conference on Model-Driven Engineering and Software Development (MODELSWARD’2014), Lisbon, Portugal, 7-9 January 2014. SCITEPRESS Digital Library, 2014. {DOI: 10.5220/0004715303920399} {ISBN: 978-989-758-007-9}
 * [9] Pedro Janeiro Coimbra, supervised by Fernando Brito e Abreu, “[An Eclipse Plugin for Metamodel Driven Measurement](http://hdl.handle.net/10071/8007)”, MSc dissertation, University Institute of Lisbon (ISCTE-IUL), November 2013.
 * [8] Aline Lúcia Baroni, Fernando Brito e Abreu, “[Formalizing Object-Oriented Design Metrics upon the UML Meta-Model](http://dx.doi.org/10.5281/zenodo.1217101)”, proceedings of the XVI Simpósio Brasileiro de Engenharia de Software (SBES), pp. 130-145, Gramado, Brazil, October 2002. Biblioteca Digital Brasileira de Computação (BDBComp), Sociedade Brasileira de Computação. {DOI: 10.5281/zenodo.1217101}
