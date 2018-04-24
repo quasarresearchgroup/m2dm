@@ -1,13 +1,37 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>quasarresearchgroup</groupId>
-  <artifactId>m2dm</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Metamodel Driven Measurement</name>
-  <description>Metamodel Driven Measurement (M2DM) Tool for Java</description>
-  
-  <packaging>jar</packaging>
-  
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.quasarresearchgroup</groupId>
+	<artifactId>m2dm</artifactId>
+
+	<packaging>jar</packaging>
+	<version>2.0</version>
+	<name>Metamodel Driven Measurement (Eclipse plugin)</name>
+	<url>https://quasarresearchgroup.github.io/m2dm/</url>
+	<description>
+		Metamodel Driven Measurement (M2DM) Tool for Java. This Eclipse plugin allows collecting metrics defined in OCL upon a UML metamodel.
+	</description>
+   
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+  	<organization>
+		<name>QUASAR Research Group</name>
+		<url>https://sites.google.com/site/quasarresearchgroup/</url>
+	</organization>
+	
+	<scm>
+		<connection>scm:git:git://github.com/quasarresearchgroup/m2dm.git</connection>
+		<developerConnection>scm:git:git://github.com/quasarresearchgroup/m2dm.git</developerConnection>
+		<url>https://github.com/quasarresearchgroup/m2dm.git</url>
+	</scm>
+	
+	<issueManagement>
+		<url>https://github.com/quasarresearchgroup/m2dm/issues</url>
+		<system>GitHub Issue Tracker</system>
+	</issueManagement>
+	
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -22,64 +46,35 @@
     </plugins>
   </build>
   
-  <organization>
-  	<name>Quasar Research Group</name>
-  	<url>https://sites.google.com/site/quasarresearchgroup/home</url>
-  </organization>
+  <repositories>
+	   
+	<repository>
+	<id>j-use-mvn-repo</id>
+        <url>https://raw.github.com/quasarresearchgroup/j-use/mvn-repo/</url>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+        </snapshots>
+    </repository>
+	
+  </repositories>
   
   <dependencies>
-	<dependency>
-	    <groupId>org.eclipse.jdt</groupId>
-	    <artifactId>org.eclipse.jdt.core</artifactId>
-	    <version>3.7.1</version>
-	</dependency>
-	<dependency>
-			<groupId>use</groupId>
-			<artifactId>use</artifactId>
-			<version>5.0.0</version>	
-			<systemPath>${basedir}/lib/use.jar</systemPath>
-			<scope>system</scope>
-		</dependency>
 
+  	<dependency>
+	    <groupId>com.github.quasarresearchgroup</groupId>
+	    <artifactId>j-use</artifactId>
+  		<version>5.0.1</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	   
 	<dependency>
-	    <groupId>org.eclipse</groupId>
-    	<artifactId>ui</artifactId>
-    	<version>3.3.0-I20070614-0800</version>
+		<groupId>junit</groupId>
+		<artifactId>junit</artifactId>
+		<version>4.12</version>
+		<scope>test</scope>
 	</dependency>
-	<dependency>
-	    <groupId>org.eclipse.swt</groupId>
-	    <artifactId>org.eclipse.swt.cocoa.macosx</artifactId>
-	    <version>4.3</version>
-	</dependency>
-	<dependency>
-		 <groupId>org.quasar.juse</groupId>
-		  <artifactId>J-USE</artifactId>
-		  <version>0.0.1-SNAPSHOT</version>
-	</dependency>
-	<dependency>
-	    <groupId>org.eclipse.jface</groupId>
-	    <artifactId>org.eclipse.jface</artifactId>
-	    <version>3.3.0</version>
-	</dependency>
-	<dependency>
-		    <groupId>junit</groupId>
-		    <artifactId>junit</artifactId>
-		    <version>4.12</version>
-		    <scope>test</scope>
-		</dependency>
-  </dependencies>
+		
+  </dependencies> 
   
-  <repositories>
-    <repository>
-      <id>ops4j</id>
-      <name>ops4j repository</name>
-      <url>http://repository.ops4j.org/maven2/</url>
-    </repository>
-    <repository>
-      <id>wso2</id>
-      <name>wso2 repository</name>
-      <url>http://dist.wso2.org/maven2/</url>
-    </repository>
-  
-  </repositories>
 </project>

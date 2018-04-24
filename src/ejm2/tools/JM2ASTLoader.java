@@ -1,4 +1,4 @@
-package main.java.ejm2.tools;
+package ejm2.tools;
 
 import java.util.Arrays;
 
@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.LineComment;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+
 import org.quasar.juse.api.JUSE_ProgramingFacade;
 import org.tzi.use.uml.ocl.value.IntegerValue;
 import org.tzi.use.uml.sys.MObject;

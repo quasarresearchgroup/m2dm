@@ -1,4 +1,4 @@
-package main.java.ejm2.tools;
+package ejm2.tools;
 
 import java.util.Arrays;
 import java.util.HashMap;

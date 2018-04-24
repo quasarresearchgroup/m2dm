@@ -1,4 +1,4 @@
-package main.java.ejm2metrics;
+package ejm2metrics;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;

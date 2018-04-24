@@ -1,0 +1,528 @@
+
+model EclipseJavaModel
+
+--- Enumerations 
+
+ enum JavaType {Primitive, ClassType, EnumType, InterfaceType, AnnotationType}
+ 
+ enum VisibilityType {Default, Public, Private, Protected}
+ 
+ enum PackageFragmentRootType {Folder, Jar, Zip}
+ 
+ abstract class JavaElement
+	attributes
+		name : String
+		handleIdentifier : String
+ end --JavaElement
+
+ class JavaProject < JavaElement
+ end --JavaProject
+
+ class PackageFragmentRoot < JavaElement
+	attributes
+		packageFragmentRootType : PackageFragmentRootType
+ end --PackageFragmentRoot 
+ 
+ class PackageFragment <  JavaElement										
+ end --PackageFragment
+
+ abstract class Annotatable
+ end
+ 
+ abstract class TypeRoot < JavaElement
+ end --TypeRoot 
+ 
+ class ClassFile < TypeRoot
+ end --ClassFile
+
+ class CompilationUnit < TypeRoot, Annotatable --Annotations associated with a TypeRoot refer to their package declaration
+ end --CompilationUnit
+
+ abstract class Member < JavaElement, Annotatable
+ end --Member
+ 
+ class Type < Member
+	attributes
+		visibility : VisibilityType
+		javaType : JavaType
+		isFinal : Boolean
+		isAbstract : Boolean
+		isStrictfp : Boolean
+		isSynthetic : Boolean
+		isDeprecated : Boolean
+	operations
+		getAllNestedTypes() : Set(Type) = self.nests
+											->union(self.nests.getAllNestedTypes())->asSet
+		getAllTypesNestedIn() : Set(Type) = if(self.nestedIn->isUndefined)
+												then Set{} 
+												else Set{self.nestedIn}->union(self.nestedIn.getAllTypesNestedIn())->asSet
+											endif
+		getFullInterfaceTree() : Set(Type) = if(self.javaType = #InterfaceType) 
+											 then Set{self}
+												->union(self.implements.getFullInterfaceTree())
+												->asSet
+											 else self.implements.getFullInterfaceTree()
+												->asSet
+											endif
+		getFullInheritanceTree() : Set(Type) = if(self.extends.oclIsUndefined)
+													then Set{}
+													else Set{self.extends}->union(self.extends.getFullInheritanceTree())->asSet
+												endif
+ end --Type 
+ 
+ class TypeParameter < JavaElement
+ end --TypeParameter
+ 
+ class Field < Member
+	attributes
+		key : String
+		visibility : VisibilityType
+		isStatic : Boolean
+		isFinal : Boolean
+		isVolatile : Boolean
+		isTransient : Boolean
+		isSynthetic : Boolean
+		isDeprecated : Boolean
+		arrayDimensions : Integer
+ end --Field
+
+ class Initializer < Member
+	attributes
+		occurrenceCount : Integer
+	operations -- 
+		getAllStatements() : OrderedSet(Statement) = body.getStatementAndChildren()->sortedBy(startPosition)->asOrderedSet
+													
+ end --Initializer
+ 
+ class Method  < Member
+	attributes
+		key : String
+		shortKey : String
+		visibility : VisibilityType
+		isConstructor : Boolean
+		isStatic : Boolean
+		isFinal : Boolean
+		isSynchronized : Boolean
+		isNative : Boolean
+		isAbstract : Boolean
+		isStrictfp : Boolean
+		isSynthetic : Boolean
+		isDeprecated : Boolean
+		isBridge : Boolean
+		hasVarargs : Boolean
+		returnTypeArrayDimensions: Integer
+	operations
+		getAllStatements() : OrderedSet(Statement) = 	if(optionalBody.isDefined)
+														then	optionalBody.getStatementAndChildren()->sortedBy(startPosition)->asOrderedSet
+														else 	OrderedSet{}
+														endif
+		CYCLO() : Integer = 1 +
+			self.getAllStatements()->select(s | not(s.oclIsKindOf(ReturnStatement))).conditionalOperatorCount->
+			excluding(oclUndefined(Integer))->sum + self.getAllStatements()->
+			select(s | s.oclIsKindOf(CatchClause) or s.oclIsKindOf(DoStatement) or s.oclIsKindOf(ForStatement) or 
+			s.oclIsKindOf(IfStatement) or (s.oclIsKindOf(SwitchCase) and not(s.oclAsType(SwitchCase).isDefault)) or 
+			s.oclIsKindOf(WhileStatement))->size
+		
+		LOC() : Integer = self.getAllStatements()->size + self.getAllStatements()->select(oclIsTypeOf(Block))->size
+		
+ end --Method 
+ 
+ class LocalVariable < JavaElement, Annotatable
+	attributes
+ 		arrayDimensions : Integer
+ end --LocalVariable
+ 
+ class Annotation < JavaElement
+ 	attributes
+		lineNumber : Integer 
+ end --Annotation
+ 
+ class AnnotationValue
+ 	attributes
+		value : String
+ end --AnnotationValue
+ 
+ abstract class ASTNode -- added for this version
+	attributes
+		startPosition : Integer
+		length : Integer
+ end --ASTNode
+ 
+ abstract class Comment < ASTNode
+ end --Comment
+ 
+ class LineComment < Comment
+ end --LineComment
+
+ class BlockComment < Comment
+ end --BlockComment
+
+ class Javadoc < Comment
+ end --Javadoc
+
+ abstract class Statement < ASTNode
+	attributes
+		conditionalOperatorCount : Integer
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{}
+ end --Statement
+
+ class AssertStatement < Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --AssertStatement
+
+ class Block < Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self} -> union(statements.getStatementAndChildren()->asSet())
+ end --Block
+ 
+ class BreakStatement < Statement
+	attributes
+		optionalLabel : String
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --BreakStatement
+
+ class ConstructorInvocation < Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --ConstructorInvocation
+
+ class ContinueStatement < Statement
+	attributes
+		optionalLabel : String
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --ContinueStatement
+
+ class DoStatement < Statement
+	attributes
+		body : Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = 	if(body.isDefined)
+														then	Set{self}->union(body.getStatementAndChildren())
+														else	Set{self}
+														endif
+ end --DoStatement
+
+ class EmptyStatement < Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --EmptyStatement
+
+ class EnhancedForStatement < Statement
+	attributes
+		body : Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = if(body.isDefined)
+														then	Set{self}->union(body.getStatementAndChildren())
+														else	Set{self}
+														endif
+ end --EnhancedForStatement
+
+ class ExpressionStatement < Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --ExpressionStatement
+
+ class ForStatement < Statement
+	attributes
+		body : Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = if(body.isDefined)
+														then	Set{self}->union(body.getStatementAndChildren())
+														else	Set{self}
+														endif
+ end --ForStatement
+
+ class IfStatement < Statement
+	attributes
+		thenStatement : Statement
+		optionalElseStatement : Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}->union(thenStatement.getStatementAndChildren())
+															->union(	if(optionalElseStatement.isDefined)
+																		then 	optionalElseStatement.getStatementAndChildren()
+																		else Set{}
+																		endif)
+ end --IfStatement
+ 
+ class LabeledStatement < Statement
+	attributes
+		body : Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = if(body.isDefined)
+														then	Set{self}->union(body.getStatementAndChildren())
+														else	Set{self}
+														endif
+ end --LabeledStatement
+
+ class ReturnStatement < Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --ReturnStatement
+
+ class SuperConstructorInvocation < Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --SuperConstructorInvocation
+
+ class SwitchCase < Statement
+	attributes
+		isDefault : Boolean
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --SwitchCase
+ 
+ class SwitchStatement < Statement
+	attributes
+		statements : Set(Statement) -- taken from NodeList
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}->union(statements.getStatementAndChildren()->asSet)
+ end --SwitchStatement
+
+ class SynchronizedStatement < Statement
+	attributes
+		body : Block
+	operations
+		getStatementAndChildren() : Set(Statement) = if(body.isDefined)
+														then	Set{self}->union(body.getStatementAndChildren())
+														else	Set{self}
+														endif
+ end --SynchronizedStatement
+ 
+ class ThrowStatement < Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --ThrowStatement
+ 
+ class TryStatement < Statement
+	attributes
+		body : Block
+		catchClauses : Set(CatchClause)
+		optionalFinallyBody : Block
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}->union(	if(body.isDefined)
+																		then body.getStatementAndChildren()->asSet
+																		else Set{}
+																		endif)
+																->union(catchClauses.getStatementAndChildren()->asSet)
+																->union(	if(optionalFinallyBody.isDefined)
+																			then optionalFinallyBody.getStatementAndChildren()->asSet
+																			else Set{}
+																			endif)
+ end --TryStatement
+
+ class TypeDeclarationStatement < Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --TypeDeclarationStatement
+
+ class VariableDeclarationStatement < Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = Set{self}
+ end --VariableDeclarationStatement
+
+ class WhileStatement < Statement
+	attributes
+		body : Statement
+	operations
+		getStatementAndChildren() : Set(Statement) = if(body.isDefined)
+														then	Set{self}->union(body.getStatementAndChildren())
+														else	Set{self}
+														endif
+ end --WhileStatement
+ 
+ class CatchClause < Statement -- CatchClause is now a Statement subclass to aid recursive functions
+	attributes
+		body : Block
+	operations
+		getStatementAndChildren() : Set(Statement) = if(body.isDefined)
+														then	Set{self}->union(body.getStatementAndChildren())
+														else	Set{self}
+														endif
+ end --CatchClause
+  
+--- Associations ------------------------------------------------------------------------
+
+ aggregation A_JavaProject_PackageFragmentRoot between
+	JavaProject [1] 
+	PackageFragmentRoot [*] role packageFragmentRoots
+ end
+ 
+ aggregation A_PackageFragmentRoot_PackageFragment between
+	PackageFragmentRoot [1] 
+	PackageFragment[*] role packageFragments
+ end
+ 
+ aggregation A_PackageFragment_TypeRoot between
+	PackageFragment [1] 
+	TypeRoot [*] role typeRoots
+ end
+ 
+ aggregation A_TypeRoot_Type between
+	TypeRoot [1] 
+	Type [*] role types
+ end
+ 
+ composition A_Type_TypeParameter between
+	Type [1] 
+	TypeParameter [*] role typeParameters ordered
+ end
+
+ association B_Type_TypeParameter between
+	Type [*] role bounds 
+	TypeParameter [*] role boundsIn
+ end
+ 
+ aggregation A_Type_Method between
+	Type [1] 
+	Method [*] role methods
+ end
+ 
+ association A_Method_Type between
+	Method [*] role returningMethods
+	Type [0..1] role returnType
+ end
+ 
+ association B_Method_Type between
+	Method [*] role throwingMethods
+	Type [*] role throws
+ end
+ 
+ association A_LocalVariable_Type between
+	LocalVariable [*] role localVariablesWithType
+	Type [1]
+ end
+ 
+ aggregation A_Annotatable_Annotation between
+	Annotatable [1] 
+	Annotation [*] role annotations
+ end
+ 
+ association A_Type_Annotation between
+	Type [1]
+	Annotation [*] role annotationsUsed
+ end
+ 
+ composition A_Annotation_AnnotationValue between
+	Annotation [1]
+	AnnotationValue [*] role values
+ end
+ 
+ association A_Field_AnnotationValue between
+	Field [1]
+	AnnotationValue [*] role fieldValues
+ end
+ 
+ aggregation A_CompilationUnit_Comment between
+	CompilationUnit [1] role location
+	Comment [*] role comments
+ end
+ 
+ composition A_Type_Initializer between
+	Type [1] 
+	Initializer [0..*] role initializers ordered
+ end
+ 
+ composition A_Type_Field between
+	Type [1] 
+	Field [*] role fields 
+ end
+ 
+ association A_Field_Type between
+	Type [1] role fieldType
+	Field [*] role fieldsWithType
+ end
+ 
+ composition A_Method_LocalVariable between
+	Method [0..1]
+	LocalVariable [*] role localVariables
+ end
+ 
+ aggregation B_Method_LocalVariable between
+	Method [0..1] role parameterLocation
+	LocalVariable [*] role parameters ordered
+ end
+ 
+ aggregation A_Initializer_LocalVariable between
+	Initializer [0..1] 
+	LocalVariable [*] role localVariables
+ end
+ 
+ aggregation A_Initializer_Block between
+	Initializer [0..1] 
+	Block [1] role body
+ end
+ 
+ aggregation A_Method_Block between
+	Method [0..1] 
+	Block [0..1] role optionalBody
+ end
+ 
+ aggregation A_Block_Statement between
+	Block [0..1]
+	Statement [*] role statements ordered
+ end
+
+  --Type_Type
+ association A_Type_Type between
+	Type [*] role nests
+	Type [0..1] role nestedIn
+ end --A_Type_Type
+
+  --Type_Type
+ association B_Type_Type between
+	Type [0..1] role extends
+	Type [*] role extendedBy
+ end --B_Type_Type
+
+  --Type_Type
+ association C_Type_Type between
+	Type [0..*] role implements
+	Type [*] role implementedBy
+ end --C_Type_Type
+ 
+ association A_Statement_Type between
+	Statement [*] role dependee
+	Type [*] role typeDependencies
+ end -- A_Statement_Type 
+ 
+  association A_Statement_Field between
+	Statement [*] role dependee
+	Field [*] role fieldsAccessed
+ end -- A_Statement_Field 
+ 
+  association A_Statement_Method between
+	Statement [*] role dependee
+	Method [*] role methodsCalled
+ end -- A_Statement_Method 
+ 
+ aggregation A_CatchClause_LocalVariable between
+	CatchClause [0..1] 
+	LocalVariable [1] role exceptionVariable
+ end -- A_CatchClause_LocalVariable 
+ 
+ association A_VariableDeclarationStatement_LocalVariable between
+	VariableDeclarationStatement [0..1] role declarationStatement
+	LocalVariable [*] role localVariablesDeclared
+ end -- A_VariableDeclarationStatement_LocalVariable
+ 
+ association A_TypeDeclarationStatement_Type between
+	TypeDeclarationStatement [0..1] role declarationStatement
+	Type [1] role typeDeclared
+ end -- A_TypeDeclarationStatement_Type
+ 
+ -------------------------- CONSTRAINTS -----------------------------
+constraints
+ 
+context LocalVariable
+	inv localVariableExclusiveLocation:
+	-- A LocalVariable instance can only be either a method parameter, a method local variable or an initializer variable.
+		self.parameterLocation.isDefined() xor self.method.isDefined() xor self.initializer.isDefined()
+
+context Block
+	inv blockExclusiveLocation:
+	-- If a block belongs to a method, it can not belong to an initializer. If it belongs to a initializer, it can not belong to a method.
+		not(self.method.isDefined() and self.initializer.isDefined())

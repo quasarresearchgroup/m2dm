@@ -1,4 +1,4 @@
-package main.java.ejm2.views;
+package ejm2.views;
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
-import main.java.ejm2.ui.EJM2ActionGroup;
+import ejm2.ui.EJM2ActionGroup;
 
 
 
