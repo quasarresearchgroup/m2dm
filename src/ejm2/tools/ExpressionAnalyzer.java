@@ -50,6 +50,7 @@ public class ExpressionAnalyzer {
 		// Clients of this method thus need to distinguish between the three kinds of IBinding
 		HashSet<IBinding> dependencies = new HashSet<IBinding>();
 		assert e != null : "Null expression";
+		
 		switch(e.getClass().getSimpleName()){
 		case "Assignment":
 			if(((Assignment)e).getLeftHandSide() != null)
@@ -57,11 +58,13 @@ public class ExpressionAnalyzer {
 			if(((Assignment)e).getRightHandSide() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((Assignment)e).getRightHandSide())));
 			break;
+			
 		case "CastExpression":
 			dependencies.add(((CastExpression)e).getType().resolveBinding());
 			if(((CastExpression)e).getExpression() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((CastExpression)e).getExpression())));
 			break;
+			
 		case "ClassInstanceCreation":
 			for(Object argument: ((ClassInstanceCreation)e).arguments()){
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies((Expression)argument)));
@@ -71,6 +74,7 @@ public class ExpressionAnalyzer {
 			if(((ClassInstanceCreation)e).getExpression() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((ClassInstanceCreation)e).getExpression())));
 			break;
+			
 		case "ConditionalExpression":
 			if(((ConditionalExpression)e).getExpression() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((ConditionalExpression)e).getExpression())));
@@ -79,6 +83,7 @@ public class ExpressionAnalyzer {
 			if(((ConditionalExpression)e).getElseExpression() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((ConditionalExpression)e).getElseExpression())));
 			break;
+			
 		case "FieldAccess":
 			dependencies.add(((FieldAccess)e).resolveTypeBinding());
 			dependencies.add(((FieldAccess)e).resolveFieldBinding());
@@ -86,6 +91,7 @@ public class ExpressionAnalyzer {
 			if(((FieldAccess)e).getExpression() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((FieldAccess)e).getExpression())));
 			break;
+			
 		case "InfixExpression":
 			if(((InfixExpression)e).getLeftOperand() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((InfixExpression)e).getLeftOperand())));
@@ -96,11 +102,13 @@ public class ExpressionAnalyzer {
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((Expression)o))));
 
 			break;
+			
 		case "InstanceofExpression":
 			if(((InstanceofExpression)e).getLeftOperand() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((InstanceofExpression)e).getLeftOperand())));
 			dependencies.add(((InstanceofExpression)e).getRightOperand().resolveBinding());
 			break;
+			
 		case "MethodInvocation":
 			IMethodBinding methodBinding = ((MethodInvocation)e).resolveMethodBinding();
 			if(methodBinding != null){
@@ -114,6 +122,7 @@ public class ExpressionAnalyzer {
 			if(((MethodInvocation)e).getExpression() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((MethodInvocation)e).getExpression())));
 			break;
+			
 		case "ParenthesizedExpression":
 			if(((ParenthesizedExpression)e).getExpression() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((ParenthesizedExpression)e).getExpression())));
@@ -122,15 +131,19 @@ public class ExpressionAnalyzer {
 			if(((PostfixExpression)e).getOperand() != null)
 				dependencies.addAll(Arrays.asList(analyzeExpressionDependencies(((PostfixExpression)e).getOperand())));
 			break;
+			
 		case "SimpleName":
 			dependencies.add(((SimpleName)e).resolveTypeBinding());
 			break;
+			
 		case "QualifiedName":
 			dependencies.add(((QualifiedName)e).resolveTypeBinding());
 			break;
+			
 		case "TypeLiteral":
 			dependencies.add(((TypeLiteral)e).getType().resolveBinding());
 			break;
+			
 		default:
 			break;
 		}
