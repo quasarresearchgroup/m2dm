@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: EJM2Metrics
-Bundle-SymbolicName: EJM2Metrics;singleton:=true
+Bundle-SymbolicName: m2dm;singleton:=true
 Bundle-Version: 0.8.5
 Bundle-Activator: ejm2metrics.Activator
 Bundle-Vendor: QUASAR

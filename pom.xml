@@ -4,7 +4,7 @@
 	<groupId>com.github.quasarresearchgroup</groupId>
 	<artifactId>m2dm</artifactId>
 
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 	<version>2.0</version>
 	<name>Metamodel Driven Measurement (Eclipse plugin)</name>
 	<url>https://quasarresearchgroup.github.io/m2dm/</url>
@@ -50,7 +50,7 @@
 	   
 	<repository>
 	<id>j-use-mvn-repo</id>
-        <url>https://raw.github.com/quasarresearchgroup/j-use/mvn-repo/</url>
+        <url>https://github.com/quasarresearchgroup/j-use/blob/master/lib/</url>
         <snapshots>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
