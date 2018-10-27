@@ -22,8 +22,10 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeParameter;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
+
 import org.quasar.juse.api.JUSE_ProgramingFacade;
 import org.quasar.juse.api.implementation.ProgramingFacade;
+
 import org.tzi.use.uml.ocl.value.BooleanValue;
 import org.tzi.use.uml.ocl.value.EnumValue;
 import org.tzi.use.uml.ocl.value.IntegerValue;

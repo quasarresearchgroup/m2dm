@@ -39,14 +39,14 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.6.1</version>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>1.9.1</source>
+          <target>1.9.1</target>
         </configuration>
       </plugin>
     </plugins>
   </build>
-  
-  <repositories>
+   
+     <repositories>
 	   
 	<repository>
 	<id>j-use-mvn-repo</id>
@@ -58,21 +58,13 @@
     </repository>
 	
   </repositories>
-  
   <dependencies>
-
-  	<dependency>
-	    <groupId>com.github.quasarresearchgroup</groupId>
-	    <artifactId>j-use</artifactId>
-  		<version>5.0.1</version>
-  		<scope>compile</scope>
-  	</dependency>
-  	   
+ 	   
 	<dependency>
 		<groupId>junit</groupId>
 		<artifactId>junit</artifactId>
 		<version>4.12</version>
-		<scope>test</scope>
+		<scope>compile</scope>
 	</dependency>
 		
   </dependencies> 
